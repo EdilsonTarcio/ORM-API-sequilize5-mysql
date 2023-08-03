@@ -53,3 +53,34 @@ Criar pasta e arquivo de routes
 
 Criar o arquivo de rotas para pessoas
 
+npx sequelize-cli model:create --name Niveis --attributes descr_nivel:string
+//Criar modelo e migrações para a tabela niveis com um campo string o ID já é automatico
+
+npx sequelize-cli model:create --name Turmas --attributes data_inicio:dateonly
+// Criar modelo e migrações para a tabela turmas sem as FK
+
+npx sequelize-cli model:create --name Matriculas --attributes status:string
+ // Criar modelo e migrações para a tabela Matricula sem as FK
+
+Adicionar associação de tabelas de um para muitos e feito com dois elementos "hasMany" e "belongTo":
+  A.hasMany(B, {
+      foreignKey: 'nome da coluna para se tornar a FK em B'
+    }) 
+//um para muitos, a FK(foreign key) deve ser declarada em B
+
+A.belongsTo(B)
+//informa que a tabela A pertence a tabela B
+
+Realizar a associação tanto do "hasMany" quanto do "belongTo"
+
+Criar coluna nas migrations, feito em turmas:
+docente_id:{
+  allowNull: false, //não pode ser null
+  type: Sequelize.INTEGER, //tipo inteiro
+  references: { //declarar as referencias
+    model: 'Pessoas', key: 'id' //informar o modelo e a coluna que será utilizado para referenciar
+}
+
+npx sequelize-cli db:migrate
+//criar as tabelas no banco
+
