@@ -63,7 +63,7 @@ class PessoaController {
               id: Number(id) //converte em numero
             }
           })
-          return res.status(201).json(pessoaAtualizada)
+          return res.status(200).json(pessoaAtualizada)
       }else{
         // retorna 0 = false se não achar a pessoa e não conseguir atualizar
         return res.status(400).json({ message: `Id ${id} não encontrado, favor verificar se a pessoa está cadastrada!`})
@@ -88,6 +88,41 @@ class PessoaController {
       return res.status(500).json(error.message)
     }
   }
+
+  //localhost:3001/pessoas/:estudanteId/matricula/:matriculaId
+static async pegaUmaMatricula(req, res){
+  const { estudanteId, matriculaId} = req.params
+  try{                                                       
+    const umaMatricula = await database.Matriculas.findOne( { 
+    //retorna um registro para encontrar todos os registros seria findAll({where:{id:Numero(id)}})
+      where: { 
+        id: Number(matriculaId),
+        estudante_id: Number(estudanteId)
+      //coluna no banco   -> variavel
+      }
+    })
+    
+    return res.status(200).json(umaMatricula)
+  }catch(error){
+    return res.status(500).json(error.message)
+  }
+}
+/*
+static async criarMatricula(req, res){
+  const { estudanteId } = req.params
+  const novaMatricula = { ...req.body, estudante_id: Number(estudanteId) }
+  try{
+    const novaPessoaCriada = await database.Matriculas.create(novaMatricula)
+ 
+    //const sql = await database.Matriculas.create("INSERT INTO `matriculas`( `status`, `estudante_id`,`turma_id`) VALUES ($1,$2)",[novaMatricula.status],[estudanteId],[novaMatricula.turma_id]);
+    await sql.save();
+    return res.status(200).json(novaPessoaCriada)
+  }catch (error){ 
+    return res.status(500).json(error.message)
+  }
+}
+*/
+
 }
 // exportar o conteudo do controller para ficar disponivel no resto do código
 module.exports = PessoaController

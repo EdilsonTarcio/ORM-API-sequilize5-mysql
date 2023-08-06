@@ -13,4 +13,7 @@ router.put('/pessoas/:id', PessoaController.atualizarPessoa)
 //Atualizar uma pessoa recebendo o body com as informações
 router.delete('/pessoas/:id', PessoaController.apagaPessoas)
 //Deletar uma pessoa recebendo o body com as informações
+
+router.get('/pessoas/:estudanteId/matricula/:matriculaId', PessoaController.pegaUmaMatricula)
+//router.post('/pessoas/:estudanteId/matricula/', PessoaController.criarMatricula)
 module.exports = router
