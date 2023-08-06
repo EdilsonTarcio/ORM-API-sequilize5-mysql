@@ -84,3 +84,8 @@ docente_id:{
 npx sequelize-cli db:migrate
 //criar as tabelas no banco
 
+npm outdated
+// verifica as versões dos aplicativos do package
+
+npm update
+// Atualiza os requisitos
