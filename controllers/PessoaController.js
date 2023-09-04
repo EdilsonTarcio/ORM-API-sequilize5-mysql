@@ -1,4 +1,5 @@
 const { where } = require('sequelize')
+const { QueryTypes } = require('sequelize');
 const database = require('../models')
 
 class PessoaController {
@@ -88,7 +89,17 @@ class PessoaController {
       return res.status(500).json(error.message)
     }
   }
+ 
+  static async restauraPessa(req, res) {
+    const {id} = req.params
+    try {
+      await database.Pessoas.restore( {where: {id: Number(id)}})
+      return res.status(200).json({message: `Pessoa id ${id} restaurado`})
+    } catch (error) {
+      return res.status(500).json(error.message)
+    }
 
+  }
   //localhost:3001/pessoas/:estudanteId/matricula/:matriculaId
 static async pegaUmaMatricula(req, res){
   const { estudanteId, matriculaId} = req.params
@@ -107,21 +118,24 @@ static async pegaUmaMatricula(req, res){
     return res.status(500).json(error.message)
   }
 }
-/*
+
 static async criarMatricula(req, res){
   const { estudanteId } = req.params
   const novaMatricula = { ...req.body, estudante_id: Number(estudanteId) }
   try{
-    const novaPessoaCriada = await database.Matriculas.create(novaMatricula)
- 
-    //const sql = await database.Matriculas.create("INSERT INTO `matriculas`( `status`, `estudante_id`,`turma_id`) VALUES ($1,$2)",[novaMatricula.status],[estudanteId],[novaMatricula.turma_id]);
-    await sql.save();
-    return res.status(200).json(novaPessoaCriada)
+    //const novaPessoaCriada = await database.Matriculas.create(novaMatricula)
+    const sql = await sequelize.query(
+      'INSERT INTO `matriculas`( `status`, `estudante_id`,`turma_id`) VALUES (?,?,?)',
+      {
+        replacements: 
+          [novaMatricula.status, Number(estudanteId), novaMatricula.turma_id],
+        type: QueryTypes.INSERT
+      });
+    return res.status(200).json(sql)
   }catch (error){ 
     return res.status(500).json(error.message)
   }
 }
-*/
 
 }
 // exportar o conteudo do controller para ficar disponivel no resto do código
